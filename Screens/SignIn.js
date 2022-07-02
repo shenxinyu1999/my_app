@@ -41,7 +41,13 @@ const SignInScreen = ({ navigation, route }) => {
                         name: username,
                         password: password
                     })
-                });
+                }).then((response) => response.text()).then((text) => {
+                    if (text == "fail") {
+
+                    } else if (text == 'success') {
+                        navigation.navigate('Home')
+                    }
+                })
             }}
         />
         <Button
