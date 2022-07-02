@@ -1,59 +1,19 @@
-import React from "react";
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ScrollView, TextInput, Button } from 'react-native';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack';
+import SignInScreen from "./Screens/SignIn";
+import SignUpScreen from "./Screens/SignUp";
 
-export default function App() {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
+const AppStack = createStackNavigator({ Home: SignUpScreen });
+const AuthStack = createStackNavigator({ 'Sign In': SignInScreen, 'Sign Up': SignUpScreen });
 
-  return (
-    <ScrollView>
-      <TextInput
-        style={{
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1
-        }}
-        defaultValue="name"
-        onChangeText={setUsername}
-        value={username}
-      />
-      <TextInput
-        style={{
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1
-        }}
-        defaultValue="password"
-        onChangeText={setPassword}
-        value={password}
-      />
-      <StatusBar style="auto" />
-      <Button
-        title="Login"
-        onPress={() => {
-          fetch('http://localhost:3000/login', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              name: username,
-              password: password
-            })
-          });
-        }}
-      />
-    </ScrollView>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default createAppContainer(
+    createSwitchNavigator(
+        {
+            App: AppStack,
+            Auth: AuthStack,
+        },
+        {
+            initialRouteName: 'Auth',
+        }
+    )
+);
