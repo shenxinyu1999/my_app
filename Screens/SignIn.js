@@ -14,7 +14,7 @@ const SignInScreen = ({ navigation, route }) => {
                 borderColor: 'gray',
                 borderWidth: 1
             }}
-            onChangeText={setUsername}
+            onChangeText={(text) => setUsername(text.replace(/[^A-Za-z0-9]/g, ''))}
             value={username}
             placeholder="Username"
         />
@@ -24,7 +24,7 @@ const SignInScreen = ({ navigation, route }) => {
                 borderColor: 'gray',
                 borderWidth: 1
             }}
-            onChangeText={setPassword}
+            onChangeText={(text) => setPassword(text.replace(/[^A-Za-z0-9]/g, ''))}
             value={password}
             placeholder="Password"
         />
@@ -39,13 +39,16 @@ const SignInScreen = ({ navigation, route }) => {
                     },
                     body: JSON.stringify({
                         name: username,
-                        password: password
+                        password: password,
+                        new: false
                     })
-                }).then((response) => response.text()).then((text) => {
-                    if (text == "fail") {
-
-                    } else if (text == 'success') {
+                }).then((response) => {
+                    if (response.status == 200) {
                         navigation.navigate('Home')
+                    } else {
+                        response.text().then((text) => {
+                            console.log(text)
+                        })
                     }
                 })
             }}
