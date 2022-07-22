@@ -1,7 +1,53 @@
-import { Text } from 'react-native';
+import React from "react";
+import { Text, FlatList, View, StyleSheet, StatusBar, Button, SafeAreaView, Alert } from 'react-native';
+
+const Item = ({ item, color }) => (
+    <View style={[styles.item, { backgroundColor: color }]}>
+        <Text>{item.title}</Text>
+    </View>
+);
 
 const HomeScreen = ({ navigation, route }) => {
-  return <Text>This is Home screen</Text>;
+    const DATA = [
+        { title: 'Ta Item' },
+        { title: 'Th Item' },
+        { title: 'Thi Item' },
+        { title: 'Thir Item' },
+        { title: 'Third Item' },
+        { title: 'Thir Item' },
+        { title: 'Thi Item' },
+        { title: 'Th Item' },
+        { title: 'T Item' },
+        { title: 'Th Item' },
+        { title: 'Thi Item' },
+        { title: 'Thir Item' },
+        { title: 'Third Item' },
+        { title: 'Thir Item' },
+    ]
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <Button title="+" />
+            ),
+        });
+    }, [navigation]);
+
+    return <SafeAreaView>
+        <FlatList
+            data={DATA}
+            renderItem={({ item, index }) => (
+                <Item item={item} color={index % 2 == 0 ? 'white' : 'gainsboro'} ></Item>
+            )}
+            keyExtractor={(item, index) => index}
+        />
+    </SafeAreaView>
 };
+
+const styles = StyleSheet.create({
+    item: {
+        padding: 30,
+    },
+});
 
 export default HomeScreen
