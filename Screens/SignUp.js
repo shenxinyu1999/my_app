@@ -1,6 +1,6 @@
 import React from "react";
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, TextInput, Button, SafeAreaView } from 'react-native';
+import { StyleSheet, TextInput, Button, SafeAreaView, Alert } from 'react-native';
 
 const SignUpScreen = ({ navigation, route }) => {
     const [username, setUsername] = React.useState('');
@@ -31,7 +31,7 @@ const SignUpScreen = ({ navigation, route }) => {
         <Button
             title="Sign Up"
             onPress={() => {
-                fetch('http://localhost:3000/login', {
+                fetch('https://fisher-shen-forum-test.herokuapp.com/login', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -47,7 +47,13 @@ const SignUpScreen = ({ navigation, route }) => {
                         navigation.navigate('Home')
                     } else {
                         response.text().then((text) => {
-                            console.log(text)
+                            Alert.alert(
+                                "",
+                                text,
+                                [
+                                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                                ]
+                            );
                         })
                     }
                 })
