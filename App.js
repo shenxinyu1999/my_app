@@ -1,16 +1,17 @@
-import SignInScreen from "./Screens/SignIn";
-import SignUpScreen from "./Screens/SignUp";
+import SignInScreen from "./Screens/SignIn"
+import SignUpScreen from "./Screens/SignUp"
 import HomeScreen from "./Screens/Home"
-import React from "react";
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import PostScreen from "./Screens/Post"
+import React from "react"
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 
-const AuthContext = React.createContext();
+const AuthContext = React.createContext()
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator()
 
 function App() {
-    const [signedIn, setSignedIn] = React.useState(false);
+    const [signedIn, setSignedIn] = React.useState(false)
 
     return (
         <AuthContext.Provider value={setSignedIn}>
@@ -18,7 +19,10 @@ function App() {
                 <Stack.Navigator>
                     {
                         signedIn ? (
-                            <Stack.Screen name="Home" component={HomeScreen} />
+                            <>
+                                <Stack.Screen name="Home" component={HomeScreen} />
+                                <Stack.Screen name="Post" component={PostScreen} />
+                            </>
                         ) : (
                             <>
                                 <Stack.Screen name="Sign In" component={SignInScreen} />

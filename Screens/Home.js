@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, FlatList, View, StyleSheet, StatusBar, Button, SafeAreaView, Alert } from 'react-native';
+import { TouchableHighlight, Text, FlatList, View, StyleSheet, StatusBar, Button, SafeAreaView, Alert } from 'react-native';
 
 const Item = ({ item, color }) => (
     <View style={[styles.item, { backgroundColor: color }]}>
@@ -9,7 +9,7 @@ const Item = ({ item, color }) => (
 
 const HomeScreen = ({ navigation, route }) => {
     const DATA = [
-        { title: 'Ta Item' },
+        { title: 'Ta Item'},
         { title: 'Th Item' },
         { title: 'Thi Item' },
         { title: 'Thir Item' },
@@ -37,7 +37,9 @@ const HomeScreen = ({ navigation, route }) => {
         <FlatList
             data={DATA}
             renderItem={({ item, index }) => (
-                <Item item={item} color={index % 2 == 0 ? 'white' : 'gainsboro'} ></Item>
+                <TouchableHighlight onPress={() => navigation.navigate('Post', { id: index })}>
+                    <Item item={item} color={index % 2 == 0 ? 'white' : 'gainsboro'} ></Item>
+                </TouchableHighlight>
             )}
             keyExtractor={(item, index) => index}
         />
