@@ -1,28 +1,45 @@
 import React from "react";
 import { Text, FlatList, View, StyleSheet, StatusBar, Button, SafeAreaView, Alert } from 'react-native';
 
-const OriginalPoster = ({ item }) => (
-    <View style={[styles.item, { backgroundColor: 'gainsboro' }]}>
-        <Text style={{ fontWeight: 'bold' }}>{item.title}</Text>
-        <Text>{item.post}</Text>
+const Title = ({ item }) => (
+    <View style={[styles.item, { backgroundColor: 'white' }]}>
+        <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{item.title}</Text>
     </View>
 );
 
 const Poster = ({ item, color }) => (
     <View style={[styles.item, { backgroundColor: color }]}>
-        <Text>{item}</Text>
+        <Text>{item.content}</Text>
     </View>
 );
 
 const PostScreen = ({ navigation, route }) => {
-    const title = 'TITLE'
+    const [POSTS, setPOSTS] = React.useState([]);
+    const thread = route.params.thread
 
-    const threads = ["I'm the original post.", "First Floor~", "Aha"]
+    React.useEffect(() => {
+        const fetchThreads = async () => {
+            const url = "https://fisher-shen-forum-test.herokuapp.com/forum"
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: thread._id
+                })
+            })
+            const allPosts = await response.json()
+            setPOSTS(allPosts)
+        }
+        fetchThreads()
+    }, [])
 
     return <SafeAreaView>
-        <OriginalPoster item={{ title: title, post: threads[0] }} />
+        <Title item={{ title: thread.title }} />
         <FlatList
-            data={threads.slice(1)}
+            data={POSTS}
             renderItem={({ item, index }) => (
                 <Poster item={item} color={index % 2 == 0 ? 'white' : 'gainsboro'} />
             )}
@@ -34,7 +51,7 @@ const PostScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     item: {
         padding: 30,
-    },
+    }
 });
 
 export default PostScreen
