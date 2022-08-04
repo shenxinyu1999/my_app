@@ -14,11 +14,12 @@ const Poster = ({ item, color }) => (
 );
 
 const PostScreen = ({ navigation, route }) => {
+    const post = route.params.post
+
     const [POSTS, setPOSTS] = React.useState([]);
-    const thread = route.params.thread
 
     React.useEffect(() => {
-        const fetchThreads = async () => {
+        const fetchReplies = async () => {
             const url = "https://fisher-shen-forum-test.herokuapp.com/forum"
             const response = await fetch(url, {
                 method: 'POST',
@@ -27,17 +28,17 @@ const PostScreen = ({ navigation, route }) => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: thread._id
+                    id: post._id
                 })
             })
             const allPosts = await response.json()
             setPOSTS(allPosts)
         }
-        fetchThreads()
+        fetchReplies()
     }, [])
 
     return <SafeAreaView>
-        <Title item={{ title: thread.title }} />
+        <Title item={{ title: post.title }} />
         <FlatList
             data={POSTS}
             renderItem={({ item, index }) => (

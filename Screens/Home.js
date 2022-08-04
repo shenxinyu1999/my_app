@@ -1,7 +1,7 @@
-import React from "react";
-import { RefreshControl, TouchableHighlight, Text, FlatList, View, StyleSheet, StatusBar, Button, SafeAreaView, Alert } from 'react-native';
+import React from "react"
+import { RefreshControl, TouchableHighlight, Text, FlatList, View, StyleSheet, StatusBar, Button, SafeAreaView, Alert } from 'react-native'
 import { FAB } from 'react-native-paper'
-import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu'
 
 const Item = ({ item, color }) => (
     <View style={[styles.item, { backgroundColor: color }]}>
@@ -10,32 +10,34 @@ const Item = ({ item, color }) => (
 );
 
 const wait = (timeout) => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
+    return new Promise(resolve => setTimeout(resolve, timeout))
 }
 
 const HomeScreen = ({ navigation, route }) => {
-    const [DATA, setDATA] = React.useState([]);
-    const [refreshing, setRefreshing] = React.useState(false);
-    const [value, setValue] = React.useState(0);
-    const [menuVisible, setMenuVisible] = React.useState(false);
+    const user = route.params.user
 
-    const hideMenu = () => setMenuVisible(false);
+    const [DATA, setDATA] = React.useState([])
+    const [refreshing, setRefreshing] = React.useState(false)
+    const [value, setValue] = React.useState(0)
+    const [menuVisible, setMenuVisible] = React.useState(false)
 
-    const showMenu = () => setMenuVisible(true);
+    const hideMenu = () => setMenuVisible(false)
+
+    const showMenu = () => setMenuVisible(true)
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
             headerLeft: () => (
                 <Menu
                     visible={menuVisible}
-                    anchor={<Text onPress={showMenu}>Show menu</Text>}
+                    anchor={<Text onPress={showMenu}>{user.name}</Text>}
                     onRequestClose={hideMenu}
                 >
-                    <MenuItem onPress={hideMenu}>Menu item 1</MenuItem>
-                    <MenuItem onPress={hideMenu}>Menu item 2</MenuItem>
-                    <MenuItem disabled>Disabled item</MenuItem>
+                    <MenuItem onPress={hideMenu}>功能1</MenuItem>
+                    <MenuItem onPress={hideMenu}>功能2</MenuItem>
+                    <MenuItem disabled>无法使用的功能</MenuItem>
                     <MenuDivider />
-                    <MenuItem onPress={hideMenu}>Menu item 4</MenuItem>
+                    <MenuItem onPress={hideMenu}>登出</MenuItem>
                 </Menu>
             ),
         });
@@ -48,27 +50,27 @@ const HomeScreen = ({ navigation, route }) => {
     }, []);
 
     React.useEffect(() => {
-        const fetchThreads = async () => {
-            const url = process.env.REACT_APP_SERVER + "forum"
-            const response = await fetch(url, {
+        const fetchPosts = async () => {
+            const response = await fetch(process.env.REACT_APP_SERVER + "forum", {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 }
             })
-            const allThreads = await response.json()
-            setDATA(allThreads)
+            const allPosts = await response.json()
+            setDATA(allPosts)
         }
-        fetchThreads()
+        fetchPosts()
     }, [value])
+
 
     return <SafeAreaView>
         <SafeAreaView>
             <FlatList
                 data={DATA}
                 renderItem={({ item, index }) => {
-                    return <TouchableHighlight onPress={() => navigation.navigate('Post', { thread: item })}>
+                    return <TouchableHighlight onPress={() => navigation.navigate('Post', { post: item })}>
                         <Item item={item} color={index % 2 == 0 ? 'white' : 'gainsboro'} ></Item>
                     </TouchableHighlight>
                 }}
@@ -86,7 +88,7 @@ const HomeScreen = ({ navigation, route }) => {
                 style={styles.fab}
                 color="white"
                 icon="plus"
-                onPress={() => navigation.navigate('NewThread')}
+                onPress={() => navigation.navigate('NewPost', { user_id: user._id })}
             />
         </SafeAreaView>
     </SafeAreaView>

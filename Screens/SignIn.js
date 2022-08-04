@@ -1,7 +1,7 @@
-import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, TextInput, Button, SafeAreaView, Alert } from 'react-native';
-import { AuthContext } from "../App.js";
+import React from 'react'
+import { StatusBar } from 'expo-status-bar'
+import { StyleSheet, TextInput, Button, SafeAreaView, Alert } from 'react-native'
+import { AuthContext } from "../App.js"
 
 const SignInScreen = ({ navigation, route }) => {
     const [username, setUsername] = React.useState('')
@@ -35,7 +35,7 @@ const SignInScreen = ({ navigation, route }) => {
                     <Button
                         title="Login"
                         onPress={() => {
-                            fetch('https://fisher-shen-forum-test.herokuapp.com/login', {
+                            fetch(process.env.REACT_APP_SERVER + "login", {
                                 method: 'POST',
                                 headers: {
                                     Accept: 'application/json',
@@ -48,7 +48,10 @@ const SignInScreen = ({ navigation, route }) => {
                                 })
                             }).then((response) => {
                                 if (response.status == 200) {
-                                    value(true)
+                                    response.json().then((result) => {
+                                        value.setUser(result)
+                                        value.setSign(true)
+                                    })
                                 } else {
                                     response.text().then((text) => {
                                         Alert.alert(

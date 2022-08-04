@@ -2,7 +2,9 @@ import React from "react";
 import { TextInput, View, StyleSheet, StatusBar, Button, SafeAreaView, Alert } from 'react-native';
 import { StackActions } from '@react-navigation/native';
 
-const NewThreadScreen = ({ navigation, route }) => {
+const NewPostScreen = ({ navigation, route }) => {
+    const user_id = route.params.user_id
+
     const [title, setTitle] = React.useState('');
     const [content, setContent] = React.useState('');
 
@@ -12,8 +14,6 @@ const NewThreadScreen = ({ navigation, route }) => {
                 <Button
                     title="发布"
                     onPress={() => {
-                        console.log(title)
-                        console.log(title.trim())
                         if (title.trim().length == 0) {
                             Alert.alert(
                                 "",
@@ -23,29 +23,32 @@ const NewThreadScreen = ({ navigation, route }) => {
                                 ]
                             );
                         } else {
-                            const url = "https://fisher-shen-forum-test.herokuapp.com/forum/new"
-                            const response = fetch(url, {
+                            const url = process.env.REACT_APP_SERVER + "forum/new"
+                            fetch(url, {
                                 method: 'POST',
                                 headers: {
                                     Accept: 'application/json',
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify({
-                                    title: title
+                                    user_id: user_id,
+                                    title: title,
+                                    content: content
                                 })
-                            }).then(response => response.json()).then(response => {
-                                const thread = {
-                                    _id: response,
+                            }).then(response => response.json()).then(post_id => {
+                                const post = {
+                                    _id: post_id,
+                                    user_id: user_id,
                                     title: title,
                                 }
-                                navigation.dispatch(StackActions.replace('Post', {thread: thread}))
+                                navigation.dispatch(StackActions.replace('Post', {post: post}))
                             })
                         }
                     }}
                 />
             ),
         });
-    }, [navigation, title]);
+    }, [navigation, title, content]);
 
     return <SafeAreaView>
         <TextInput
@@ -75,4 +78,4 @@ const NewThreadScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
 })
 
-export default NewThreadScreen
+export default NewPostScreen
