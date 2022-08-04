@@ -1,6 +1,7 @@
 import React from "react";
 import { RefreshControl, TouchableHighlight, Text, FlatList, View, StyleSheet, StatusBar, Button, SafeAreaView, Alert } from 'react-native';
 import { FAB } from 'react-native-paper'
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 
 const Item = ({ item, color }) => (
     <View style={[styles.item, { backgroundColor: color }]}>
@@ -16,6 +17,29 @@ const HomeScreen = ({ navigation, route }) => {
     const [DATA, setDATA] = React.useState([]);
     const [refreshing, setRefreshing] = React.useState(false);
     const [value, setValue] = React.useState(0);
+    const [menuVisible, setMenuVisible] = React.useState(false);
+
+    const hideMenu = () => setMenuVisible(false);
+
+    const showMenu = () => setMenuVisible(true);
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => (
+                <Menu
+                    visible={menuVisible}
+                    anchor={<Text onPress={showMenu}>Show menu</Text>}
+                    onRequestClose={hideMenu}
+                >
+                    <MenuItem onPress={hideMenu}>Menu item 1</MenuItem>
+                    <MenuItem onPress={hideMenu}>Menu item 2</MenuItem>
+                    <MenuItem disabled>Disabled item</MenuItem>
+                    <MenuDivider />
+                    <MenuItem onPress={hideMenu}>Menu item 4</MenuItem>
+                </Menu>
+            ),
+        });
+    }, [menuVisible]);
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
@@ -25,7 +49,7 @@ const HomeScreen = ({ navigation, route }) => {
 
     React.useEffect(() => {
         const fetchThreads = async () => {
-            const url = "https://fisher-shen-forum-test.herokuapp.com/forum"
+            const url = process.env.REACT_APP_SERVER + "forum"
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
