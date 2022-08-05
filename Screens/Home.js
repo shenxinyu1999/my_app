@@ -16,7 +16,7 @@ const wait = (timeout) => {
 const HomeScreen = ({ navigation, route }) => {
     const user = route.params.user
 
-    const [DATA, setDATA] = React.useState([])
+    const [POSTS, setPOSTS] = React.useState([])
     const [refreshing, setRefreshing] = React.useState(false)
     const [value, setValue] = React.useState(0)
     const [menuVisible, setMenuVisible] = React.useState(false)
@@ -59,7 +59,7 @@ const HomeScreen = ({ navigation, route }) => {
                 }
             })
             const allPosts = await response.json()
-            setDATA(allPosts)
+            setPOSTS(allPosts)
         }
         fetchPosts()
     }, [value])
@@ -68,9 +68,9 @@ const HomeScreen = ({ navigation, route }) => {
     return <SafeAreaView>
         <SafeAreaView>
             <FlatList
-                data={DATA}
+                data={POSTS}
                 renderItem={({ item, index }) => {
-                    return <TouchableHighlight onPress={() => navigation.navigate('Post', { post: item })}>
+                    return <TouchableHighlight onPress={() => navigation.navigate('Post', { post_id: item._id })}>
                         <Item item={item} color={index % 2 == 0 ? 'white' : 'gainsboro'} ></Item>
                     </TouchableHighlight>
                 }}

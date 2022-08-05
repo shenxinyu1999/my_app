@@ -14,9 +14,9 @@ const Poster = ({ item, color }) => (
 );
 
 const PostScreen = ({ navigation, route }) => {
-    const post = route.params.post
+    const post_id = route.params.post_id
 
-    const [POSTS, setPOSTS] = React.useState([]);
+    const [POST, setPOST] = React.useState({});
 
     React.useEffect(() => {
         const fetchReplies = async () => {
@@ -28,23 +28,23 @@ const PostScreen = ({ navigation, route }) => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: post._id
+                    id: post_id
                 })
             })
-            const allPosts = await response.json()
-            setPOSTS(allPosts)
+            const post = await response.json()
+            setPOST(post)
         }
         fetchReplies()
     }, [])
 
     return <SafeAreaView>
-        <Title item={{ title: post.title }} />
+        <Title item={{ title: POST.title }} />
         <FlatList
-            data={POSTS}
+            data={POST.allReplies}
             renderItem={({ item, index }) => (
                 <Poster item={item} color={index % 2 == 0 ? 'white' : 'gainsboro'} />
             )}
-            keyExtractor={(item, index) => index}
+            keyExtractor={item => item._id}
         />
     </SafeAreaView>
 };
