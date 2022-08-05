@@ -2,28 +2,28 @@ import React from "react";
 import { TextInput, View, StyleSheet, StatusBar, Button, SafeAreaView, Alert } from 'react-native';
 import { StackActions } from '@react-navigation/native';
 
-const NewPostScreen = ({ navigation, route }) => {
+const NewReplyScreen = ({ navigation, route }) => {
     const user_id = route.params.user_id
+    const post_id = route.params.post_id
 
-    const [title, setTitle] = React.useState('');
     const [content, setContent] = React.useState('');
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
                 <Button
-                    title="发布"
+                    title="发送"
                     onPress={() => {
-                        if (title.trim().length == 0) {
+                        if (content.trim().length == 0) {
                             Alert.alert(
                                 "",
-                                "标题不能为空",
+                                "内容不能为空",
                                 [
                                     { text: "OK", onPress: () => console.log("OK Pressed") }
                                 ]
                             );
                         } else {
-                            const url = process.env.REACT_APP_SERVER + "forum/new"
+                            const url = process.env.REACT_APP_SERVER + "forum/reply"
                             fetch(url, {
                                 method: 'POST',
                                 headers: {
@@ -32,45 +32,32 @@ const NewPostScreen = ({ navigation, route }) => {
                                 },
                                 body: JSON.stringify({
                                     user_id: user_id,
-                                    title: title,
+                                    post_id: post_id,
                                     content: content
                                 })
-                            }).then(response => response.json()).then(post_id => {
-                                navigation.dispatch(StackActions.replace('Post', { user_id: user_id, post_id: post_id }))
-                            })
+                            }).then(response => navigation.dispatch(StackActions.pop()))
                         }
                     }}
                 />
             ),
         });
-    }, [navigation, title, content]);
+    }, [navigation, content]);
 
     return <SafeAreaView>
-        <TextInput
-            style={{
-                height: 40,
-                borderColor: 'gray',
-                borderWidth: 1
-            }}
-            onChangeText={(text) => setTitle(text.trimStart())}
-            value={title}
-            placeholder="标题（必填）"
-        />
         <TextInput
             style={{
                 height: 400,
                 borderColor: 'gray',
                 borderWidth: 1
             }}
-            onChangeText={(text) => setContent(text.trimStart())}
+            onChangeText={(text) => setContent(text)}
             value={content}
-            placeholder="正文"
+            placeholder="内容"
         />
-
     </SafeAreaView>
 }
 
 const styles = StyleSheet.create({
 })
 
-export default NewPostScreen
+export default NewReplyScreen

@@ -1,5 +1,5 @@
 import React from "react"
-import { RefreshControl, TouchableHighlight, Text, FlatList, View, StyleSheet, StatusBar, Button, SafeAreaView, Alert } from 'react-native'
+import { RefreshControl, TouchableHighlight, Text, FlatList, View, StyleSheet, SafeAreaView } from 'react-native'
 import { FAB } from 'react-native-paper'
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu'
 
@@ -70,7 +70,7 @@ const HomeScreen = ({ navigation, route }) => {
             <FlatList
                 data={POSTS}
                 renderItem={({ item, index }) => {
-                    return <TouchableHighlight onPress={() => navigation.navigate('Post', { post_id: item._id })}>
+                    return <TouchableHighlight onPress={() => navigation.navigate('Post', { user_id: user._id, post_id: item._id })}>
                         <Item item={item} color={index % 2 == 0 ? 'white' : 'gainsboro'} ></Item>
                     </TouchableHighlight>
                 }}
