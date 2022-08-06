@@ -5,9 +5,15 @@ import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu'
 
 const Item = ({ item, color }) => (
     <View style={[styles.item, { backgroundColor: color }]}>
-        <Text>{item.title}</Text>
+        <View>
+            <Text>{item.title}</Text>
+        </View>
+        <View>
+            <Text style={{ fontSize: 10 }}>{item.user.name}</Text>
+            <Text style={{ fontSize: 10 }}>{item.updatedAt}</Text>
+        </View>
     </View>
-);
+)
 
 const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout))
@@ -70,7 +76,7 @@ const HomeScreen = ({ navigation, route }) => {
             <FlatList
                 data={POSTS}
                 renderItem={({ item, index }) => {
-                    return <TouchableHighlight onPress={() => navigation.navigate('Post', { user_id: user._id, post_id: item._id })}>
+                    return <TouchableHighlight onPress={() => navigation.navigate('Post', { user: user._id, post: item._id })}>
                         <Item item={item} color={index % 2 == 0 ? 'white' : 'gainsboro'} ></Item>
                     </TouchableHighlight>
                 }}
@@ -88,7 +94,7 @@ const HomeScreen = ({ navigation, route }) => {
                 style={styles.fab}
                 color="white"
                 icon="plus"
-                onPress={() => navigation.navigate('NewPost', { user_id: user._id })}
+                onPress={() => navigation.navigate('NewPost', { user: user._id })}
             />
         </SafeAreaView>
     </SafeAreaView>
@@ -97,6 +103,8 @@ const HomeScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     item: {
         padding: 30,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     fab: {
         margin: 5

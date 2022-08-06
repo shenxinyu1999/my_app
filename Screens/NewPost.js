@@ -3,7 +3,7 @@ import { TextInput, View, StyleSheet, StatusBar, Button, SafeAreaView, Alert } f
 import { StackActions } from '@react-navigation/native';
 
 const NewPostScreen = ({ navigation, route }) => {
-    const user_id = route.params.user_id
+    const user = route.params.user
 
     const [title, setTitle] = React.useState('');
     const [content, setContent] = React.useState('');
@@ -31,12 +31,12 @@ const NewPostScreen = ({ navigation, route }) => {
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify({
-                                    user_id: user_id,
+                                    user: user,
                                     title: title,
                                     content: content
                                 })
-                            }).then(response => response.json()).then(post_id => {
-                                navigation.dispatch(StackActions.replace('Post', { user_id: user_id, post_id: post_id }))
+                            }).then(response => response.json()).then(post => {
+                                navigation.dispatch(StackActions.replace('Post', { user: user, post: post }))
                             })
                         }
                     }}

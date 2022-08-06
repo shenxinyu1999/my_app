@@ -6,21 +6,35 @@ const wait = (timeout) => {
     return new Promise(resolve => setTimeout(resolve, timeout))
 }
 
-const Title = ({ item }) => (
-    <View style={[styles.item, { backgroundColor: 'white' }]}>
-        <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{item.title}</Text>
+const OriginalPost = ({ item }) => {
+    return Object.keys(item).length === 0 ? (<View></View>) : (
+    <View style={[styles.item, { backgroundColor: 'gainsboro' }]}>
+        <View>
+            <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{item.title}</Text>
+            <Text>{item.content}</Text>
+        </View>
+        <View>
+            <Text style={{ fontSize: 10 }}>{item.user.name}</Text>
+            <Text style={{ fontSize: 10 }}>{item.updatedAt}</Text>
+        </View>
     </View>
-);
+)}
 
 const Poster = ({ item, color }) => (
     <View style={[styles.item, { backgroundColor: color }]}>
-        <Text>{item.content}</Text>
+        <View>
+            <Text>{item.content}</Text>
+        </View>
+        <View>
+            <Text style={{ fontSize: 10 }}>{item.user.name}</Text>
+            <Text style={{ fontSize: 10 }}>{item.updatedAt}</Text>
+        </View>
     </View>
-);
+)
 
 const PostScreen = ({ navigation, route }) => {
-    const user_id = route.params.user_id
-    const post_id = route.params.post_id
+    const user = route.params.user
+    const post = route.params.post
 
     const [POST, setPOST] = React.useState({})
     const [refreshing, setRefreshing] = React.useState(false)
@@ -42,11 +56,11 @@ const PostScreen = ({ navigation, route }) => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: post_id
+                    id: post
                 })
             })
-            const post = await response.json()
-            setPOST(post)
+            const result = await response.json()
+            setPOST(result)
         }
         fetchReplies()
     }, [value])
@@ -54,8 +68,8 @@ const PostScreen = ({ navigation, route }) => {
     return <SafeAreaView>
         <SafeAreaView>
             <FlatList
-                ListHeaderComponent={<Title item={{ title: POST.title }} />}
-                data={POST.allReplies}
+                ListHeaderComponent={<OriginalPost item={POST} />}
+                data={POST.replies}
                 renderItem={({ item, index }) => (
                     <Poster item={item} color={index % 2 == 0 ? 'white' : 'gainsboro'} />
                 )}
@@ -73,7 +87,7 @@ const PostScreen = ({ navigation, route }) => {
                 style={styles.fab}
                 color="white"
                 icon="plus"
-                onPress={() => navigation.navigate('NewReply', { user_id: user_id, post_id: post_id })}
+                onPress={() => navigation.navigate('NewReply', { user: user, post: post })}
             />
         </SafeAreaView>
     </SafeAreaView>
@@ -82,6 +96,8 @@ const PostScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     item: {
         padding: 30,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     fab: {
         margin: 5
