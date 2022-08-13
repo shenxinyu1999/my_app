@@ -66,7 +66,7 @@ const SignInScreen = ({ navigation, route }) => {
                     <Button
                         title="Sign Up"
                         onPress={() =>
-                            navigation.navigate('Sign Up')
+                            navigation.navigate('Sign Up', { setUser: value.setUser, setSign: value.setSign })
                         }
                     />
                 </SafeAreaView>
