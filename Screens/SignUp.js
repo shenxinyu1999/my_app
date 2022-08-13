@@ -35,7 +35,7 @@ const SignUpScreen = ({ navigation, route }) => {
                     <Button
                         title="Sign Up"
                         onPress={() => {
-                            fetch(process.env.REACT_APP_SERVER + 'login', {
+                            fetch(process.env.REACT_APP_SERVER + 'login/register', {
                                 method: 'POST',
                                 headers: {
                                     Accept: 'application/json',
