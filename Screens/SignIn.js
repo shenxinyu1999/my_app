@@ -44,7 +44,6 @@ const SignInScreen = ({ navigation, route }) => {
                                 body: JSON.stringify({
                                     name: username,
                                     password: password,
-                                    new: false
                                 })
                             }).then((response) => {
                                 if (response.status == 200) {
@@ -53,15 +52,13 @@ const SignInScreen = ({ navigation, route }) => {
                                         value.setSign(true)
                                     })
                                 } else {
-                                    response.text().then((text) => {
-                                        Alert.alert(
-                                            "",
-                                            text,
-                                            [
-                                                { text: "OK", onPress: () => console.log("OK Pressed") }
-                                            ]
-                                        );
-                                    })
+                                    Alert.alert(
+                                        "",
+                                        "密码错误或用户名不存在",
+                                        [
+                                            { text: "OK", onPress: () => console.log("OK Pressed") }
+                                        ]
+                                    );
                                 }
                             })
                         }}

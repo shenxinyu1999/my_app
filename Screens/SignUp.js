@@ -44,22 +44,19 @@ const SignUpScreen = ({ navigation, route }) => {
                                 body: JSON.stringify({
                                     name: username,
                                     password: password,
-                                    new: true
                                 })
                             }).then((response) => {
                                 if (response.status == 200) {
-                                    value.setId(result._id)
+                                    value.setUser(result)
                                     value.setSign(true)
                                 } else {
-                                    response.text().then((text) => {
-                                        Alert.alert(
-                                            "",
-                                            text,
-                                            [
-                                                { text: "OK", onPress: () => console.log("OK Pressed") }
-                                            ]
-                                        );
-                                    })
+                                    Alert.alert(
+                                        "",
+                                        "用户名已存在",
+                                        [
+                                            { text: "OK", onPress: () => console.log("OK Pressed") }
+                                        ]
+                                    );
                                 }
                             })
                         }}
