@@ -36,7 +36,7 @@ const NewPostScreen = ({ navigation, route }) => {
                                     content: content
                                 })
                             }).then(response => response.json()).then(post => {
-                                navigation.dispatch(StackActions.replace('Post', { user: user, post: post }))
+                                navigation.dispatch(StackActions.replace('Post', { user: user, post: post.post_id }))
                             })
                         }
                     }}
