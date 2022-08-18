@@ -31,7 +31,7 @@ const NewPostScreen = ({ navigation, route }) => {
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify({
-                                    user: user,
+                                    user_id: user,
                                     title: title,
                                     content: content
                                 })

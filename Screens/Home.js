@@ -9,8 +9,8 @@ const Item = ({ item, color }) => (
             <Text>{item.title}</Text>
         </View>
         <View>
-            <Text style={{ fontSize: 10 }}>{item.user.name}</Text>
-            <Text style={{ fontSize: 10 }}>{item.updatedAt}</Text>
+            <Text style={{ fontSize: 10 }}>{item.name}</Text>
+            <Text style={{ fontSize: 10 }}>{item.modified}</Text>
         </View>
     </View>
 )
@@ -76,11 +76,11 @@ const HomeScreen = ({ navigation, route }) => {
             <FlatList
                 data={POSTS}
                 renderItem={({ item, index }) => {
-                    return <TouchableHighlight onPress={() => navigation.navigate('Post', { user: user._id, post: item._id })}>
+                    return <TouchableHighlight onPress={() => navigation.navigate('Post', { user: user.user_id, post: item.post_id })}>
                         <Item item={item} color={index % 2 == 0 ? 'white' : 'gainsboro'} ></Item>
                     </TouchableHighlight>
                 }}
-                keyExtractor={item => item._id}
+                keyExtractor={item => item.post_id}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
@@ -94,7 +94,7 @@ const HomeScreen = ({ navigation, route }) => {
                 style={styles.fab}
                 color="white"
                 icon="plus"
-                onPress={() => navigation.navigate('NewPost', { user: user._id })}
+                onPress={() => navigation.navigate('NewPost', { user: user.user_id })}
             />
         </SafeAreaView>
     </SafeAreaView>

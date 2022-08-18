@@ -7,15 +7,16 @@ const wait = (timeout) => {
 }
 
 const OriginalPost = ({ item }) => {
-    return Object.keys(item).length === 0 ? (<View></View>) : (
+    console.log(item)
+    return !item ? (<View></View>) : (
     <View style={[styles.item, { backgroundColor: 'gainsboro' }]}>
         <View>
             <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{item.title}</Text>
             <Text>{item.content}</Text>
         </View>
         <View>
-            <Text style={{ fontSize: 10 }}>{item.user.name}</Text>
-            <Text style={{ fontSize: 10 }}>{item.updatedAt}</Text>
+            <Text style={{ fontSize: 10 }}>{item.name}</Text>
+            <Text style={{ fontSize: 10 }}>{item.modified}</Text>
         </View>
     </View>
 )}
@@ -26,8 +27,8 @@ const Poster = ({ item, color }) => (
             <Text>{item.content}</Text>
         </View>
         <View>
-            <Text style={{ fontSize: 10 }}>{item.user.name}</Text>
-            <Text style={{ fontSize: 10 }}>{item.updatedAt}</Text>
+            <Text style={{ fontSize: 10 }}>{item.name}</Text>
+            <Text style={{ fontSize: 10 }}>{item.modified}</Text>
         </View>
     </View>
 )
@@ -56,7 +57,7 @@ const PostScreen = ({ navigation, route }) => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id: post
+                    post_id: post
                 })
             })
             const result = await response.json()
@@ -68,12 +69,12 @@ const PostScreen = ({ navigation, route }) => {
     return <SafeAreaView>
         <SafeAreaView>
             <FlatList
-                ListHeaderComponent={<OriginalPost item={POST} />}
+                ListHeaderComponent={<OriginalPost item={POST.original} />}
                 data={POST.replies}
                 renderItem={({ item, index }) => (
                     <Poster item={item} color={index % 2 == 0 ? 'white' : 'gainsboro'} />
                 )}
-                keyExtractor={item => item._id}
+                keyExtractor={item => item.reply_id}
                 refreshControl={
                     <RefreshControl
                         refreshing={refreshing}

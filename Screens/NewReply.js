@@ -31,8 +31,8 @@ const NewReplyScreen = ({ navigation, route }) => {
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify({
-                                    user: user,
-                                    post: post,
+                                    user_id: user,
+                                    post_id: post,
                                     content: content
                                 })
                             }).then(response => navigation.dispatch(StackActions.pop()))
