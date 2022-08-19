@@ -2,6 +2,7 @@ import React from "react"
 import { RefreshControl, TouchableHighlight, Text, FlatList, View, StyleSheet, SafeAreaView } from 'react-native'
 import { FAB } from 'react-native-paper'
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu'
+import { AuthContext } from "../App.js"
 
 const Item = ({ item, color }) => (
     <View style={[styles.item, { backgroundColor: color }]}>
@@ -33,19 +34,28 @@ const HomeScreen = ({ navigation, route }) => {
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
-            headerLeft: () => (
-                <Menu
-                    visible={menuVisible}
-                    anchor={<Text onPress={showMenu}>{user.name}</Text>}
-                    onRequestClose={hideMenu}
-                >
-                    <MenuItem onPress={hideMenu}>功能1</MenuItem>
-                    <MenuItem onPress={hideMenu}>功能2</MenuItem>
-                    <MenuItem disabled>无法使用的功能</MenuItem>
-                    <MenuDivider />
-                    <MenuItem onPress={hideMenu}>登出</MenuItem>
-                </Menu>
-            ),
+            headerLeft: () => {
+                return <AuthContext.Consumer>
+                    {
+                        value => {
+                            return <Menu
+                                visible={menuVisible}
+                                anchor={<Text onPress={showMenu}>{user.name}</Text>}
+                                onRequestClose={hideMenu}
+                            >
+                                <MenuItem onPress={hideMenu}>功能1</MenuItem>
+                                <MenuItem onPress={hideMenu}>功能2</MenuItem>
+                                <MenuItem disabled>无法使用的功能</MenuItem>
+                                <MenuDivider />
+                                <MenuItem onPress={() => {
+                                    value.setUser('')
+                                    value.setSign(false)
+                                }}>登出</MenuItem>
+                            </Menu>
+                        }
+                    }
+                </AuthContext.Consumer>
+            },
         });
     }, [menuVisible]);
 
